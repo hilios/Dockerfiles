@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-RUN apk --update add  wget tar &&\
+RUN apk --update add wget tar &&\
     mkdir -p /opt/jre &&\
     wget --no-check-certificate --no-cookies \
         --header "Cookie: oraclelicense=accept-securebackup-cookie" \
