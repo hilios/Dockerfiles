@@ -1,8 +1,8 @@
-Oracle Java 8
+Oracle Java
 ===
 
-A minimal Oracle Java 8 JRE environment based on alpine Linux.
+A minimal Oracle Java JRE environment based on alpine Linux.
 
 ```bash
-$ docker build -t oracle-java8
+$ docker build -t hilios/java:9.0.1
 ```
