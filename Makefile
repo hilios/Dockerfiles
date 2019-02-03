@@ -10,7 +10,7 @@ image: check-version
 	docker build -t hilios/${PROJECT}:${VERSION} ${PROJECT}
 
 proxy: check-version
-	docker build -t hilios/proxy:${VERSION} proxy
+	docker build -t gcr.io/hilios/proxy:${VERSION} proxy
 
 kafka: check-version
 	@if [ -z "${KAFKA_VERSION}" ]; then echo "Kafka version is not set"; exit 1; fi
