@@ -3,7 +3,6 @@ FROM nginx:alpine
 EXPOSE 80 443
 
 COPY ./credentials.json /etc/credentials.json
-COPY ./crontab.txt /etc/crontab.txt
 
 RUN apk add --no-cache --upgrade certbot fail2ban py-pip \
     && chmod a+rwx,u-x,g-rwx,o-rwx /etc/credentials.json \
@@ -16,11 +15,11 @@ RUN apk add --no-cache --upgrade certbot fail2ban py-pip \
                         --agree-tos \
                         -d hilios.com.br \
                         -d *.hilios.com.br \
+                        -d edsonhilios.com.br \
                         -d *.edsonhilios.com.br \
-                        -d *.edsonhilios.com.br \
-    && cat /etc/crontab.txt >> /etc/crontabs/root \
-    && rm -rf /etc/crontab.txt;
+    && echo "#!/bin/sh; certbot renew --post-hook \"nginx -s reload\"" > /etc/periodic/daily/certbot-renew \
+    && chmod a+x /etc/periodic/daily/certbot-renew;
+
+VOLUME /etc/letsencrypt
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
-
-CMD ["certbot", "renew", "&&", "nginx", "-g", "daemon off;"]
