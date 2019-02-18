@@ -4,9 +4,10 @@ EXPOSE 80 443
 
 COPY ./credentials.json /etc/credentials.json
 
-RUN apk add --no-cache --upgrade certbot fail2ban py-pip \
+RUN apt-get update \
+    && apt-get install -y python3-pip \
     && chmod a+rwx,u-x,g-rwx,o-rwx /etc/credentials.json \
-    && pip install -U --no-cache-dir pip certbot certbot-dns-google certbot-dns-route53 \
+    && pip3 install -U --no-cache-dir pip certbot certbot-dns-google certbot-dns-route53 \
     && certbot certonly --non-interactive \
                         --dns-google \
                         --dns-google-credentials /etc/credentials.json \
@@ -17,8 +18,8 @@ RUN apk add --no-cache --upgrade certbot fail2ban py-pip \
                         -d *.hilios.com.br \
                         -d edsonhilios.com.br \
                         -d *.edsonhilios.com.br \
-    && echo "#!/bin/sh; certbot renew --post-hook \"nginx -s reload\"" > /etc/periodic/daily/certbot-renew \
-    && chmod a+x /etc/periodic/daily/certbot-renew;
+    && echo "#!/bin/sh; certbot renew --post-hook \"nginx -s reload\"" > /etc/cron.daily/certbot-renew \
+    && chmod a+x /etc/cron.daily/certbot-renew;
 
 VOLUME /etc/letsencrypt
 
